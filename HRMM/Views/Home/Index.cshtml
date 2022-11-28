@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserDataModel> SignInManager
+@inject UserManager<UserDataModel> UserManager
+@model ClientDataModel
+@{
+    ViewData["Title"] = "Add Client";
+}
+    <link href="~/css/Overall.css" rel="stylesheet" type="text/css" />
+
+<body>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <form asp-area="" asp-controller="Home" asp-action="ClientAdd" method="post">
+            <label asp-for="FirstName">First name:</label>
+            <input asp-for="FirstName" id="txtbox" />
+            <br />
+            <label asp-for="LastName">Last name:</label>
+            <input asp-for="LastName"id="txtbox" />
+            <br />
+            <label asp-for="TelNumber">Telephone number:</label>
+            <input asp-for="TelNumber"id="txtbox" />
+            <br />
+            <label asp-for="Email">Email:</label>
+            <input asp-for="Email"id="txtbox" />
+            <br />
+            <label asp-for="Elder">Elderly:</label>
+            <input asp-for="Elder" />
+            <br />
+            <button class="butn" type="submit">Create</button>
+        </form>
+        <br />
+        foreach (ClientDataModel c in ViewBag.Clients)
+        {
+            <section style="text-align:center">
+                <h1>Client's name: @c.FirstName @c.LastName</h1>
+                <h2>Email: @c.Email</h2>
+                @if (c.Elder == true)
+                {
+                    <h3>Elder: Yes</h3>
+                }
+                else
+                {
+                    <h3>Elder: No</h3>
+                }
+                <h5>Telephone Number: @c.TelNumber</h5>
+                <h4>All Reservations:</h4>
+                @foreach (ReservationDataModel n in ViewBag.Reservations)
+                {
+                    if (n.ClientsR.Id == c.Id)
+                    {
+                        <h5>@n.Id</h5>
+                        <h5>@n.StartDate</h5>
+                        <h5>@n.EndDate</h5>
+                        <h5>@n.FinalPrice</h5>
+                    }
+                }
+            </section>
+            <br />
+        }
+    }
+
+</body>

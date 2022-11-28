@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserDataModel> SignInManager
+@inject UserManager<UserDataModel> UserManager
+@model ReservationDataModel
+@{
+    ViewData["Title"] = "Add Reservation";
+}
+
+<link href="~/css/Overall.css" rel="stylesheet" type="text/css" />
+<body>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <form asp-area="" asp-controller="Home" asp-action="ReservationAdd">
+            <label asp-for="RoomR.Number">Room Number:</label>
+            <select id="txtbox" asp-for="RoomR.Number" asp-items="@(new SelectList(ViewBag.Rooms, nameof(RoomDataModel.Number), nameof(RoomDataModel.Number)))">
+                <option value="RoomR.Number">Please select one</option>
+            </select>
+            <br />
+            <label asp-for="ClientsR.Id">Client</label>
+            <select id="txtbox" asp-for="ClientsR.Id" asp-items="@(new SelectList(ViewBag.Clients, nameof(ClientDataModel.Id), nameof(ClientDataModel.FirstName)))">
+                <option value="ClientsR.Number">Please select one</option>
+            </select>
+            <br />
+            <label asp-for="StartDate">Start Date:</label>
+            <input id="txtbox" asp-for="StartDate" />
+            <br />
+            <label asp-for="EndDate">End Date:</label>
+            <input id="txtbox" asp-for="EndDate" />
+            <br />
+            <label asp-for="Breakfast">Breakfast</label>
+            <input id="txtbox" asp-for="Breakfast" />
+            <br />
+            <label asp-for="AllInclusive">AllInclusive</label>
+            <input id="txtbox" asp-for="AllInclusive" />
+            <br />
+            <button class="butn" c type="submit">Make Reservation</button>
+        </form>
+        <br />
+        if (ViewBag.Last == 1)
+        {
+            <h1>Final price is:</h1>
+            @ViewBag.Reserv.FinalPrice
+        }
+        <br />
+        foreach (ReservationDataModel r in ViewBag.Reservations)
+        {
+            <section style="text-align:center">
+                <h2>Room number: @r.RoomR.Number</h2>
+                <h2>Client in charge: @r.ClientsR.Id</h2>
+                <h2>Employee who made the reservation: @r.UserR.Id</h2>
+                <h3>Dates of reservation: @r.StartDate | @r.EndDate</h3>
+                @if (r.Breakfast == true)
+                {
+                    <h4>Included breakfast</h4>
+                }
+                else
+                {
+                    <h4>Excluded breakfast</h4>
+                }
+                @if (r.AllInclusive == true)
+                {
+                    <h4>Included all-inclusive</h4>
+                }
+                else
+                {
+                    <h4>Excluded all-inclusive</h4>
+                }
+                <h3>Price: @r.FinalPrice</h3>
+
+            </section>
+        }
+    }
+</body>

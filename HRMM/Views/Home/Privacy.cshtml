@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Room";
+}
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserDataModel> SignInManager
+@inject UserManager<UserDataModel> UserManager
+@model RoomDataModel
+    <link href="~/css/Overall.css" rel="stylesheet" type="text/css" />
+    <body>
+        @if (SignInManager.IsSignedIn(User) && User.Identity.Name == "Kantleto")
+        {
+
+            <form asp-area="" asp-controller="Home" asp-action="RoomAdd" method="post">
+                <label asp-for="Space">Space:</label>
+                <input asp-for="Space"  id="txtbox"/>
+                <br />
+                <label asp-for="Type">Type:</label>
+                <select asp-for="Type"  id="txtbox" asp-items="Html.GetEnumSelectList<Types>()">
+                    <option selected="selected" value="Type">Choose</option>
+                </select>
+                <br />
+                <label asp-for="PriceE">Price for elder:</label>
+                <input asp-for="PriceE"  id="txtbox" />
+                <br />
+                <label asp-for="PriceY">Price for young:</label>
+                <input asp-for="PriceY"   id="txtbox"/>
+                <br />
+                <label asp-for="Number">Number:</label>
+                <input asp-for="Number"   id="txtbox"/>
+                <br />
+                <button class="butn" type="submit">Create</button>
+            </form>
+            <br />
+            @foreach (RoomDataModel room in ViewBag.Rooms)
+            {
+                <section style="text-align:center">
+                    <h4>Room Number: @room.Number</h4>
+                    @switch (room.Type)
+                    {
+                        case Types.largeroom:<h2>Type: Large Room</h2>break;
+                        case Types.doublebed_room:<h2>Type : Double Bedroom</h2>break;
+                        case Types.apartment:<h2>Type: Apartment</h2>break;
+                        case Types.penthouse:<h2>Type: Penthouse</h2>break;
+                        case Types.two_identical_beds:<h2>Type: Two Identical Beds</h2> break;
+                        default:<h2>Missing</h2>break;
+                    }
+                    <h3>Room Capacity: @room.Space</h3>
+                    <h3>Room Price For the Youth:@room.PriceY </h3>
+                    <h3>Room Price For the Elder:@room.PriceE </h3>
+                </section>
+                <br />
+            }
+
+
+        }
+        else if (SignInManager.IsSignedIn(User))
+        {
+            @foreach (RoomDataModel room in ViewBag.Rooms)
+            {
+                <section style="text-align:center">
+                    <h4>Room Number: @room.Number</h4>
+                    @switch (room.Type)
+                    {
+                        case Types.largeroom:<h2>Type: Large Room</h2>break;
+                        case Types.doublebed_room:<h2>Type : Double Bedroom</h2>break;
+                        case Types.apartment:<h2>Type: Apartment</h2>break;
+                        case Types.penthouse:<h2>Type: Penthouse</h2>break;
+                        case Types.two_identical_beds:<h2>Type: Two Identical Beds</h2> break;
+                        default:<h2>Missing</h2>break;
+                    }
+                    <h3>Room Capacity: @room.Space</h3>
+                    <h3>Room Price For the Youth:@room.PriceY </h3>
+                    <h3>Room Price For the Elder:@room.PriceE </h3>
+                </section>
+                <br />
+            }
+        }
+    </body>

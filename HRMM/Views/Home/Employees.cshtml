@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<UserDataModel> SignInManager
+@inject UserManager<UserDataModel> UserManager
+@model UserDataModel
+    <link href="~/css/Overall.css" rel="stylesheet" type="text/css" />
+    <form asp-area="" asp-controller="Home" asp-action="Send">
+        <label asp-for="UserName">UserName:</label>
+        <select id="txtbox" asp-for="UserName" asp-items="@(new SelectList(ViewBag.Users, nameof(UserDataModel.UserName), nameof(UserDataModel.UserName)))">
+            <option value="UserName">Please select one</option>
+        </select>
+        <button class="butn" type="submit">Edit profile</button>
+        </form>
+        @if (SignInManager.IsSignedIn(User) && User.Identity.Name == "Kantleto")
+        {
+            foreach (UserDataModel u in ViewBag.Users)
+            {
+                <section style="text-align:center">
+                    <h3>Name: @u.FirstName @u.MiddleName @u.LastName , Username: @u.UserName</h3>
+                    <h3>EGN: @u.EGN</h3>
+                    <h4>Telephone number: @u.TelNumber</h4>
+                    <h4>Email: @u.Email</h4>
+                    <h5>First day of work: @u.StartDate</h5>
+                </section>
+            }
+        }
+
